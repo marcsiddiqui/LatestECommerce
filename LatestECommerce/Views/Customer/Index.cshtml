@@ -1,0 +1,39 @@
+﻿@model LatestECommerce.Models.CustomerListModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome Customer List</h1>
+    <a class="btn btn-primary" asp-controller="Customer" asp-action="Create" style="float: left">Add New</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number 1</th>
+                <th>Phone Number 2</th>
+                <th>Username</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CustomerModels)
+            {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PhoneNumber1</td>
+                    <td>@item.PhoneNumber2</td>
+                    <td>@item.Username</td>
+                    <td>
+                        <a class="btn btn-warning" href="@Url.Action("EditStudent2", "Home", new { id = @item.Id })" style="float: left">Edit</a>
+                        <a class="btn btn-danger" href="@Url.Action("DeleteStudent2", "Home", new { id = @item.Id })" style="float: left">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
