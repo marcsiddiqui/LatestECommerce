@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LatestECommerce.DbConfig;
@@ -21,4 +20,6 @@ public partial class Customer
     public string Password { get; set; } = null!;
 
     public bool Deleted { get; set; }
+
+    public string? ImagePath { get; set; }
 }

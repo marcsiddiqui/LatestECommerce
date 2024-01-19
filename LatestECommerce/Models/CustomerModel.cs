@@ -19,5 +19,7 @@ namespace LatestECommerce.Models
         public string Password { get; set; } = null!;
 
         public bool Deleted { get; set; }
+
+        public string? ImagePath { get; set; }
     }
 }

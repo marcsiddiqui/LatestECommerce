@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using LatestECommerce.Models;
 
 namespace LatestECommerce.DbConfig;
 
@@ -43,6 +42,4 @@ public partial class EcommerceContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    public DbSet<LatestECommerce.Models.CustomerModel>? CustomerModel { get; set; }
 }

@@ -10,6 +10,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th></th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone Number 1</th>
@@ -22,14 +23,15 @@
             @foreach (var item in Model.CustomerModels)
             {
                 <tr>
+                    <td><img src="@item.ImagePath" height="50" width="50" /></td>
                     <td>@item.FullName</td>
                     <td>@item.Email</td>
                     <td>@item.PhoneNumber1</td>
                     <td>@item.PhoneNumber2</td>
                     <td>@item.Username</td>
                     <td>
-                        <a class="btn btn-warning" href="@Url.Action("EditStudent2", "Home", new { id = @item.Id })" style="float: left">Edit</a>
-                        <a class="btn btn-danger" href="@Url.Action("DeleteStudent2", "Home", new { id = @item.Id })" style="float: left">Delete</a>
+                        <a class="btn btn-warning" href="@Url.Action("Edit", "Customer", new { id = @item.Id })" style="float: left">Edit</a>
+                        <a class="btn btn-danger" href="@Url.Action("Delete", "Customer", new { id = @item.Id })" style="float: left">Delete</a>
                     </td>
                 </tr>
             }
