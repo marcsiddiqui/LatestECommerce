@@ -10,14 +10,13 @@ using System.IO;
 
 namespace LatestECommerce.Controllers
 {
-    [LoginOnly]
-    public class CustomerController : Controller
+    public class AuthController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly EcommerceContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public CustomerController(ILogger<HomeController> logger, EcommerceContext context, IWebHostEnvironment hostEnvironment)
+        public AuthController(ILogger<HomeController> logger, EcommerceContext context, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _context = context;
@@ -173,13 +172,40 @@ namespace LatestECommerce.Controllers
                 if (System.IO.File.Exists(oldPath))
                     System.IO.File.Delete(oldPath);
             }
-            
+
             var path = Path.Combine(_hostEnvironment.WebRootPath, fileName);
             using (FileStream stream = new FileStream(path, FileMode.Create))
             {
                 await photo.CopyToAsync(stream);
                 stream.Close();
             }
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(AuthModel model)
+        {
+            if (model == null || !ModelState.IsValid || string.IsNullOrWhiteSpace(model.Username) || string.IsNullOrWhiteSpace(model.Password))
+                return View(model);
+
+            var customer = _context.Customers.FirstOrDefault(x => 
+            (x.Username == model.Username || x.Email == model.Username) 
+            &&
+            x.Password == model.Password && !x.Deleted);
+
+            if (customer == null)
+                return View(model);
+
+            CookieOptions co = new CookieOptions();
+            co.Expires = DateTime.Now.AddMinutes(5);
+
+            Response.Cookies.Append("AuthenticatedCustomer", customer.Id.ToString(), co);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
