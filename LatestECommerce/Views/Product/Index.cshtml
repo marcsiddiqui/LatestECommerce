@@ -1,0 +1,41 @@
+﻿@model LatestECommerce.Models.ProductListModel;
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Product List</h1>
+    <a class="btn btn-primary" asp-controller="Product" asp-action="Create" style="float: left">Add New</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>StockQuantity</th>
+                <th>CategoryId</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductModels)
+            {
+                <tr>
+                    <td>@*<img src="@item.ImagePath" height="50" width="50" />*@</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td>@item.StockQuantity</td>
+                    <td>@item.CategoryId</td>
+                    <td>
+                        <a class="btn btn-warning" href="@Url.Action("Edit", "Product", new { id = @item.Id })" style="float: left">Edit</a>
+                        <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new { id = @item.Id })" style="float: left">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

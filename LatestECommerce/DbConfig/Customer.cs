@@ -13,7 +13,7 @@ public partial class Customer
 
     public string PhoneNumber1 { get; set; } = null!;
 
-    public string? PhoneNumber2 { get; set; }
+    public string PhoneNumber2 { get; set; } = null!;
 
     public string Username { get; set; } = null!;
 

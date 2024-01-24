@@ -1,0 +1,31 @@
+﻿@model LatestECommerce.Models.CategoryModel;
+
+@{
+    ViewData["Title"] = "Category Edit";
+}
+
+
+
+<div class="text-center">
+    <a class="btn btn-primary" asp-controller="Category" asp-action="Create" style="float: left">Add New</a> 
+    <a class="btn btn-secondary" asp-controller="Category" asp-action="Index" style="float: left">Back To List</a>
+    <h1 class="display-4">Edit Category</h1>
+    <form asp-action="Edit" method="post">
+
+        <input name="Id" type="hidden" value="@Model.Id" />
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsActive" class="control-label"></label>
+            <input asp-for="IsActive" class="form-control" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Edit" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

@@ -15,18 +15,35 @@ public partial class EcommerceContext : DbContext
     {
     }
 
+    public virtual DbSet<Category> Categories { get; set; }
+
     public virtual DbSet<Customer> Customers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    public virtual DbSet<Product> Products { get; set; }
 
-    }
+    public virtual DbSet<ProductVariant> ProductVariants { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=LAB3-91;Initial Catalog=ECommerce;Persist Security Info=True;User ID=sa;Password=aptech;Persist Security Info=True;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Category__3214EC07FBAA2773");
+
+            entity.ToTable("Category");
+
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC0703059259");
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07942CECCE");
 
             entity.ToTable("Customer");
 
@@ -36,6 +53,26 @@ public partial class EcommerceContext : DbContext
             entity.Property(e => e.PhoneNumber1).HasMaxLength(20);
             entity.Property(e => e.PhoneNumber2).HasMaxLength(20);
             entity.Property(e => e.Username).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Product__3214EC0722FA08E6");
+
+            entity.ToTable("Product");
+
+            entity.Property(e => e.Name).HasMaxLength(1000);
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+        });
+
+        modelBuilder.Entity<ProductVariant>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ProductV__3214EC07831C2A8F");
+
+            entity.ToTable("ProductVariant");
+
+            entity.Property(e => e.Key).HasMaxLength(1000);
+            entity.Property(e => e.Value).HasMaxLength(1000);
         });
 
         OnModelCreatingPartial(modelBuilder);

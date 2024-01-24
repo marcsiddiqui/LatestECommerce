@@ -1,0 +1,41 @@
+﻿@model LatestECommerce.Models.CategoryListModel;
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Categories List</h1>
+    <a class="btn btn-primary" asp-controller="Category" asp-action="Create" style="float: left">Add New</a>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CategoryModels)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        @if (item.IsActive.Value)
+                        {
+                            <img height="25" src="https://i.pinimg.com/originals/55/4c/ac/554cac022d9a79b7e8c49f727c8707f6.png" />
+                        }
+                        else
+                        {
+                            <img height="25" src="https://i.pngimg.me/thumb/f/720/m2i8G6b1K9i8H7K9.jpg" />
+                        }
+                    <td>
+                        <a class="btn btn-warning" href="@Url.Action("Edit", "Category", new { id = @item.Id })" style="float: left">Edit</a>
+                        <a class="btn btn-danger" href="@Url.Action("Delete", "Category", new { id = @item.Id })" style="float: left">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

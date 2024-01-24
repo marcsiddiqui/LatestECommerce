@@ -1,0 +1,2 @@
+Command to update database model:
+Scaffold-DbContext "Data Source=LAB3-91;Initial Catalog=ECommerce;Persist Security Info=True;User ID=sa;Password=aptech;Persist Security Info=True;TrustServerCertificate=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir DbConfig -Force

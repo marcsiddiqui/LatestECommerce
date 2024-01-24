@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace LatestECommerce.Controllers
 {
+    [LoginOnly]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
