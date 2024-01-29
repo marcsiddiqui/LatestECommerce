@@ -25,7 +25,12 @@ namespace LatestECommerce.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            AuthModel model = new AuthModel();
+
+            model.Username = "ma";
+            model.Password = "22";
+
+            return View(model);
         }
 
         [HttpPost]

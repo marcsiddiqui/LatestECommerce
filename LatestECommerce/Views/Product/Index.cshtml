@@ -15,7 +15,7 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>StockQuantity</th>
-                <th>CategoryId</th>
+                <th>Category</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,7 +28,7 @@
                     <td>@item.Description</td>
                     <td>@item.Price</td>
                     <td>@item.StockQuantity</td>
-                    <td>@item.CategoryId</td>
+                    <td>@item.CategoryName</td>
                     <td>
                         <a class="btn btn-warning" href="@Url.Action("Edit", "Product", new { id = @item.Id })" style="float: left">Edit</a>
                         <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new { id = @item.Id })" style="float: left">Delete</a>

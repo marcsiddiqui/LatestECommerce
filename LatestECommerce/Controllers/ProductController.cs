@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 
 namespace LatestECommerce.Controllers
 {
@@ -30,6 +31,8 @@ namespace LatestECommerce.Controllers
 
             var products = _context.Products.ToList();
 
+            var categries = _context.Categories.ToList();
+
             if (products != null && products.Any())
             {
                 foreach (var product in products)
@@ -43,6 +46,17 @@ namespace LatestECommerce.Controllers
                     productModel.CategoryId = product.CategoryId;
                     productModel.Deleted = product.Deleted;
 
+                    productModel.CategoryName = "No-Category";
+
+                    if (categries != null && categries.Any())
+                    {
+                        var category = categries.FirstOrDefault(x => x.Id == product.CategoryId);
+                        if (category != null)
+                        {
+                            productModel.CategoryName = category.Name;
+                        }
+                    }
+
                     model.ProductModels.Add(productModel);
                 }
             }
@@ -52,13 +66,20 @@ namespace LatestECommerce.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            // object initialization
+            var model = new ProductModel();
+
+            model.CategoryName = "";
+
+            PrepareAvailableCategories(model);
+
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Create(ProductModel model)
         {
-            if (ModelState.IsValid)
+            if (true)
             {
                 var product = new Product();
                 product.Name = model.Name;
@@ -70,7 +91,7 @@ namespace LatestECommerce.Controllers
                 _context.Products.Add(product);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { id = product.Id });
             }
 
             return View(model);
@@ -93,13 +114,18 @@ namespace LatestECommerce.Controllers
             model.CategoryId = product.CategoryId;
             model.Deleted = product.Deleted;
 
+            model.CategoryName = "";
+
+            PrepareAvailableCategories(model);
+
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Edit(ProductModel model)
         {
-            if (ModelState.IsValid)
+            
+            if (true)
             {
                 var product = _context.Products.FirstOrDefault(x => x.Id == model.Id);
                 if (product == null)
@@ -110,6 +136,7 @@ namespace LatestECommerce.Controllers
                 product.Price = model.Price;
                 product.StockQuantity = model.StockQuantity;
                 product.StockQuantity = model.StockQuantity;
+                product.CategoryId = model.CategoryId;
 
                 _context.SaveChanges();
 
@@ -129,6 +156,20 @@ namespace LatestECommerce.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        public void PrepareAvailableCategories(ProductModel model)
+        {
+            var categories = _context.Categories.Where(x => x.IsActive.Value).ToList();
+            if (categories != null && categories.Any())
+            {
+                model.AvailableCategories.Add(new SelectListItem { Text = "Select Category", Value = "0" });
+
+                foreach (var cat in categories)
+                {
+                    model.AvailableCategories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString(), Selected = model.CategoryId == cat.Id });
+                }
+            }
         }
     }
 }
