@@ -117,6 +117,7 @@ namespace LatestECommerce.Controllers
             model.CategoryName = "";
 
             PrepareAvailableCategories(model);
+            PrepareAvailableVariantKeys(model);
 
             return View(model);
         }
@@ -170,6 +171,27 @@ namespace LatestECommerce.Controllers
                     model.AvailableCategories.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString(), Selected = model.CategoryId == cat.Id });
                 }
             }
+        }
+
+        public void PrepareAvailableVariantKeys(ProductModel model)
+        {
+            model.AvailableVariantKeys.Add(new SelectListItem { Text = "Select Variant Key", Value = "0" });
+            model.AvailableVariantKeys.Add(new SelectListItem { Text = "Color", Value = "Color" });
+            model.AvailableVariantKeys.Add(new SelectListItem { Text = "Size", Value = "Size" });
+        }
+
+        [HttpPost]
+        public IActionResult SaveVariant(int productId, string VariantKey, string VariantValue)
+        {
+            var productVariant = new ProductVariant();
+            productVariant.ProductId = productId;
+            productVariant.Key = VariantKey;
+            productVariant.Value = VariantValue;
+
+            _context.ProductVariants.Add(productVariant);
+            _context.SaveChanges();
+
+            return Json("Success");
         }
     }
 }

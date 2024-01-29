@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit Product";
 }
 
-
+<script src="~/js/jquery-3.7.1.min.js"></script>
 
 <div class="text-center">
     <a class="btn btn-primary" asp-controller="Product" asp-action="Create" style="float: left">Add New</a> 
@@ -12,7 +12,7 @@
     <h1 class="display-4">Edit Product</h1>
     <form asp-action="Edit" method="post">
 
-        <input name="Id" type="hidden" value="@Model.Id" />
+        <input name="Id" id="Id" type="hidden" value="@Model.Id" />
         <input name="CategoryName" type="hidden" value="@Model.CategoryName" />
 
         <div class="form-group">
@@ -44,4 +44,43 @@
             <input type="submit" value="Edit" class="btn btn-primary" />
         </div>
     </form>
+
+    <br /><br /><br />
+
+    <div class="form-group">
+        <label asp-for="VariantKey" class="control-label"></label>
+        @Html.DropDownList("VariantKey", Model.AvailableVariantKeys)
+        <span asp-validation-for="VariantKey" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="VariantValue" class="control-label"></label>
+        <input asp-for="VariantValue" class="form-control" />
+        <span asp-validation-for="VariantValue" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="button" id="saveVariant" value="Save Variant" class="btn btn-primary" />
+    </div>
+
+    <script>
+        $("#saveVariant").click(function(){
+            $.ajax({
+                url: "@Url.Action("SaveVariant", "Product")",
+                type: "post",
+                data: {
+                    "productId": $("#Id").val(),
+                    "VariantKey": $("#VariantKey").val(),
+                    "VariantValue": $("#VariantValue").val()
+                },
+                success: function (response) {
+                    if (response == "Success"){
+                        alert("Product Variant Added Successfully");
+                        $("#VariantKey").val("0");
+                        $("#VariantKey").val("");
+                    }
+                },
+                error: function () {
+                }
+            });
+        })
+    </script>
 </div>

@@ -9,6 +9,7 @@ namespace LatestECommerce.Models
         public ProductModel()
         {
             AvailableCategories = new List<SelectListItem>();
+            AvailableVariantKeys = new List<SelectListItem>();
         }
 
         public int Id { get; set; }
@@ -28,5 +29,10 @@ namespace LatestECommerce.Models
         public string CategoryName { get; set; } = null!;
 
         public List<SelectListItem> AvailableCategories { get; set; }
+
+        public List<SelectListItem> AvailableVariantKeys { get; set; }
+
+        public string VariantKey { get; set; }
+        public string VariantValue { get; set; }
     }
 }
