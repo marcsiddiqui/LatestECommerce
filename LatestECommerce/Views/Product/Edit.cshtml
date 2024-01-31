@@ -61,6 +61,18 @@
         <input type="button" id="saveVariant" value="Save Variant" class="btn btn-primary" />
     </div>
 
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Variant Name</th>
+                <th>Variant Value</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="varianttable">
+        </tbody>
+    </table>
+
     <script>
         $("#saveVariant").click(function(){
             $.ajax({
@@ -72,15 +84,33 @@
                     "VariantValue": $("#VariantValue").val()
                 },
                 success: function (response) {
-                    if (response == "Success"){
-                        alert("Product Variant Added Successfully");
+
+                    console.log(response);
+
+                    if (response.success){
                         $("#VariantKey").val("0");
-                        $("#VariantKey").val("");
+                        $("#VariantValue").val("");
+
+                        $("#varianttable").html("");
+
+                        var html = "";
+
+                        $.each(response.variantList, function (i, item) {
+
+                            html = html + "<tr><td> " + item.key + " </td><td>" + item.value + "</td><td><button class='btn btn-danger deleteVariant' style='float: left'>Delete</button></td></tr>";
+
+                        });
+
+                        $("#varianttable").html(html);
                     }
                 },
                 error: function () {
                 }
             });
         })
+
+        $(".deleteVariant").click(function(){
+            console.log("We want to delete a variant, but which variant");
+        });
     </script>
 </div>

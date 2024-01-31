@@ -183,15 +183,35 @@ namespace LatestECommerce.Controllers
         [HttpPost]
         public IActionResult SaveVariant(int productId, string VariantKey, string VariantValue)
         {
-            var productVariant = new ProductVariant();
-            productVariant.ProductId = productId;
-            productVariant.Key = VariantKey;
-            productVariant.Value = VariantValue;
+            if (!string.IsNullOrWhiteSpace(VariantKey) && !string.IsNullOrWhiteSpace(VariantValue))
+            {
+                var productVariant = new ProductVariant();
+                productVariant.ProductId = productId;
+                productVariant.Key = VariantKey;
+                productVariant.Value = VariantValue;
 
-            _context.ProductVariants.Add(productVariant);
-            _context.SaveChanges();
+                _context.ProductVariants.Add(productVariant);
+                _context.SaveChanges();
+            }
 
-            return Json("Success");
+            List<ProductVariantModel> productVariantModels = new List<ProductVariantModel>();
+
+            var allVariants = _context.ProductVariants.Where(x => x.ProductId == productId).ToList();
+            if (allVariants != null && allVariants.Any())
+            {
+                foreach (var variant in allVariants)
+                {
+                    ProductVariantModel productVariantModel = new ProductVariantModel();
+                    productVariantModel.Key = variant.Key;
+                    productVariantModel.Value = variant.Value;
+                    productVariantModel.Id = variant.Id;
+                    productVariantModel.ProductId = variant.ProductId;
+                    
+                    productVariantModels.Add(productVariantModel);
+                }
+            }
+
+            return Json(new { Success = true, VariantList = productVariantModels });
         }
     }
 }
