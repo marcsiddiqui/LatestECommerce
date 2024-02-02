@@ -29,7 +29,7 @@ namespace LatestECommerce.Controllers
         {
             var model = new ProductListModel();
 
-            var products = _context.Products.ToList();
+            var products = _context.Products.Where(x => !x.Deleted).ToList();
 
             var categries = _context.Categories.ToList();
 

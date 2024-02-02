@@ -102,15 +102,19 @@
                         });
 
                         $("#varianttable").html(html);
+
+                        $(".deleteVariant").on("click", function () {
+                            console.log("We want to delete a variant, but which variant");
+                        });
                     }
                 },
                 error: function () {
                 }
             });
-        })
+        });
 
-        $(".deleteVariant").click(function(){
-            console.log("We want to delete a variant, but which variant");
+        $(document).ready(function () {
+            $("#saveVariant").click();
         });
     </script>
 </div>
