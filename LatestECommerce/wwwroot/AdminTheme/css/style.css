@@ -20345,18 +20345,18 @@ dl li {
 /* === Landing screens === */
 /* Auth */
 .auth .login-half-bg {
-  background: url("../images/auth/login-bg.jpg");
-  background-size: cover;
+    background: url("~/admintheme/images/auth/login-bg.jpg");
+    background-size: cover;
 }
 
 .auth .register-half-bg {
-  background: url("../images/auth/register-bg.jpg");
-  background-size: cover;
+    background: url("~/admintheme/images/auth/register-bg.jpg");
+    background-size: cover;
 }
 
 .auth.lock-full-bg {
-  background: url("../images/auth/lockscreen-bg.jpg");
-  background-size: cover;
+    background: url("~/admintheme/images/auth/lockscreen-bg.jpg");
+    background-size: cover;
 }
 
 .auth .lock-profile-img {
@@ -20718,15 +20718,15 @@ dl li {
 
 /* Navbar */
 .navbar {
-  font-weight: 400;
-  transition: background 0.25s ease;
-  -webkit-transition: background 0.25s ease;
-  -moz-transition: background 0.25s ease;
-  -ms-transition: background 0.25s ease;
-  background: url(../images/other/navbar-cover2.jpg) center center no-repeat;
-  background-size: cover;
-  height: 262px;
-  width: auto;
+    font-weight: 400;
+    transition: background 0.25s ease;
+    -webkit-transition: background 0.25s ease;
+    -moz-transition: background 0.25s ease;
+    -ms-transition: background 0.25s ease;
+    background: url(~/admintheme/images/other/navbar-cover2.jpg) center center no-repeat;
+    background-size: cover;
+    height: 262px;
+    width: auto;
 }
 
 .navbar .navbar-menu-wrapper {
