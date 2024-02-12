@@ -118,6 +118,7 @@ namespace LatestECommerce.Controllers
 
             PrepareAvailableCategories(model);
             PrepareAvailableVariantKeys(model);
+            PrepareAvailableVariantSizes(model);
 
             return View(model);
         }
@@ -180,11 +181,25 @@ namespace LatestECommerce.Controllers
             model.AvailableVariantKeys.Add(new SelectListItem { Text = "Size", Value = "Size" });
         }
 
+        public void PrepareAvailableVariantSizes(ProductModel model)
+        {
+            model.AvailableSizes.Add(new SelectListItem { Text = "X-Small", Value = "X-Small" });
+            model.AvailableSizes.Add(new SelectListItem { Text = "Small", Value = "Small" });
+            model.AvailableSizes.Add(new SelectListItem { Text = "Medium", Value = "Medium" });
+            model.AvailableSizes.Add(new SelectListItem { Text = "Large", Value = "Large" });
+            model.AvailableSizes.Add(new SelectListItem { Text = "X-Large", Value = "X-Large" });
+            model.AvailableSizes.Add(new SelectListItem { Text = "XX-Large", Value = "XX-Large" });
+        }
+
         [HttpPost]
         public IActionResult SaveVariant(int productId, string VariantKey, string VariantValue)
         {
             if (!string.IsNullOrWhiteSpace(VariantKey) && !string.IsNullOrWhiteSpace(VariantValue))
             {
+                var existingVariant = _context.ProductVariants.Where(x => x.Key == VariantKey && x.Value == VariantValue).ToList();
+                if (existingVariant != null && existingVariant.Any())
+                    return Json(new { Success = false, Message = "Already Exists!" });
+
                 var productVariant = new ProductVariant();
                 productVariant.ProductId = productId;
                 productVariant.Key = VariantKey;

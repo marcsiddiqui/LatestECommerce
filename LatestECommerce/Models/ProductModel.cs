@@ -10,6 +10,7 @@ namespace LatestECommerce.Models
         {
             AvailableCategories = new List<SelectListItem>();
             AvailableVariantKeys = new List<SelectListItem>();
+            AvailableSizes = new List<SelectListItem>();
         }
 
         public int Id { get; set; }
@@ -32,7 +33,11 @@ namespace LatestECommerce.Models
 
         public List<SelectListItem> AvailableVariantKeys { get; set; }
 
+        public List<SelectListItem> AvailableSizes { get; set; }
+
         public string VariantKey { get; set; }
         public string VariantValue { get; set; }
+
+        public string VariantSize { get; set; }
     }
 }

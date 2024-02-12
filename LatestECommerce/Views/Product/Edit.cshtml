@@ -53,10 +53,11 @@
         <span asp-validation-for="VariantKey" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="VariantValue" class="control-label"></label>
-        <input asp-for="VariantValue" class="form-control" />
-        <span asp-validation-for="VariantValue" class="text-danger"></span>
+        <label asp-for="VariantSize" class="control-label"></label>
+        @Html.DropDownList("VariantSize", Model.AvailableSizes)
+        <span asp-validation-for="VariantSize" class="text-danger"></span>
     </div>
+    <input type="color" id="VariantColor" name="VariantColor" value="#ff0000">
     <div class="form-group">
         <input type="button" id="saveVariant" value="Save Variant" class="btn btn-primary" />
     </div>
@@ -75,21 +76,30 @@
 
     <script>
         $("#saveVariant").click(function(){
+
+            var variantValue = "";
+            var selectedVal = $("#VariantKey").val();
+            if (selectedVal == "Color") {
+                variantValue = $("#VariantColor").val();
+            } else if (selectedVal == "Size") {
+                variantValue = $("#VariantSize").val();
+            }
+
             $.ajax({
                 url: "@Url.Action("SaveVariant", "Product")",
                 type: "post",
                 data: {
                     "productId": $("#Id").val(),
                     "VariantKey": $("#VariantKey").val(),
-                    "VariantValue": $("#VariantValue").val()
+                    "VariantValue": variantValue
                 },
                 success: function (response) {
 
-                    console.log(response);
+                    console.log(response.message);
 
                     if (response.success){
                         $("#VariantKey").val("0");
-                        $("#VariantValue").val("");
+                        $("#VariantSize").val("");
 
                         $("#varianttable").html("");
 
@@ -97,14 +107,30 @@
 
                         $.each(response.variantList, function (i, item) {
 
-                            html = html + "<tr><td> " + item.key + " </td><td>" + item.value + "</td><td><button class='btn btn-danger deleteVariant' style='float: left'>Delete</button></td></tr>";
+                            var variantValueDisplay = item.value;
+
+                            if (item.key == "Color") {
+                                variantValueDisplay = "<i class='mdi mdi-brightness-1' style='font-size: 25px; color: " + item.value + ";'></i>";
+                            }
+
+                            html = html + "<tr><td> " + item.key + " </td><td>" + variantValueDisplay + "</div></td><td><button class='btn btn-danger deleteVariant' style='float: left'>Delete</button></td></tr>";
 
                         });
 
                         $("#varianttable").html(html);
 
-                        $(".deleteVariant").on("click", function () {
-                            console.log("We want to delete a variant, but which variant");
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Your work has been saved",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.message
                         });
                     }
                 },
@@ -114,7 +140,26 @@
         });
 
         $(document).ready(function () {
+
             $("#saveVariant").click();
+
+            $("#VariantKey").change(function () {
+
+                var dd = $(this);
+                console.log(dd);
+
+                var selectedVal = $(this).val();
+                if (selectedVal == "Color") {
+                    $("#VariantSize").hide();
+                    $("#VariantColor").show();
+                } else if (selectedVal == "Size") {
+                    $("#VariantSize").show();
+                    $("#VariantColor").hide();
+                } else {
+                    $("#VariantSize").hide();
+                    $("#VariantColor").hide();
+                }
+            });
         });
     </script>
 </div>
