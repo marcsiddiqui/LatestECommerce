@@ -46,6 +46,15 @@ namespace LatestECommerce.Controllers
                     productModel.CategoryId = product.CategoryId;
                     productModel.Deleted = product.Deleted;
 
+                    if (!string.IsNullOrWhiteSpace(product.ImagePath))
+                    {
+                        productModel.ImagePath = product.ImagePath;
+                    }
+                    else
+                    {
+                        productModel.ImagePath = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+                    }
+
                     productModel.CategoryName = "No-Category";
 
                     if (categries != null && categries.Any())
@@ -77,7 +86,7 @@ namespace LatestECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductModel model)
+        public IActionResult Create(ProductModel model, IFormFile photo)
         {
             if (true)
             {
@@ -90,6 +99,16 @@ namespace LatestECommerce.Controllers
 
                 _context.Products.Add(product);
                 _context.SaveChanges();
+
+                if (photo != null)
+                {
+                    var fileName = "Content\\Product\\" + product.Id.ToString() + "_" + product.Name + "_" + photo.FileName;
+
+                    UploadImage(fileName, photo);
+
+                    product.ImagePath = fileName;
+                    _context.SaveChanges();
+                }
 
                 return RedirectToAction("Edit", new { id = product.Id });
             }
@@ -113,6 +132,7 @@ namespace LatestECommerce.Controllers
             model.StockQuantity = product.StockQuantity;
             model.CategoryId = product.CategoryId;
             model.Deleted = product.Deleted;
+            model.ImagePath = "https://localhost:7176/" + product.ImagePath;
 
             model.CategoryName = "";
 
@@ -227,6 +247,23 @@ namespace LatestECommerce.Controllers
             }
 
             return Json(new { Success = true, VariantList = productVariantModels });
+        }
+
+        public async Task UploadImage(string fileName, IFormFile photo, bool editMode = false, string oldFileName = "")
+        {
+            if (editMode)
+            {
+                var oldPath = Path.Combine(_hostEnvironment.WebRootPath, oldFileName);
+                if (System.IO.File.Exists(oldPath))
+                    System.IO.File.Delete(oldPath);
+            }
+
+            var path = Path.Combine(_hostEnvironment.WebRootPath, fileName);
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                await photo.CopyToAsync(stream);
+                stream.Close();
+            }
         }
     }
 }

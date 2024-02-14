@@ -7,9 +7,26 @@
 <div class="text-center">
     <a class="btn btn-secondary" asp-controller="Product" asp-action="Index" style="float: left">Back To List</a>
     <h1 class="display-4">Create Product</h1>
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
 
         <input name="CategoryName" type="hidden" value="@Model.CategoryName" />
+
+        <div class="form-group">
+            <img id="user_img" height="100" width="90" style="border:solid" />
+            <input type="file" name="photo" accept="image/*" onchange="show(this)" />
+            <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+            <script type="text/javascript">
+                function show(input) {
+                    if (input.files && input.files[0]) {
+                        var filerdr = new FileReader();
+                        filerdr.onload = function (e) {
+                            $('#user_img').attr('src', e.target.result);
+                        }
+                        filerdr.readAsDataURL(input.files[0]);
+                    }
+                }
+            </script>
+        </div>
 
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>

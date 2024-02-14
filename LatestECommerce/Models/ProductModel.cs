@@ -27,6 +27,8 @@ namespace LatestECommerce.Models
 
         public bool Deleted { get; set; }
 
+        public string? ImagePath { get; set; }
+
         public string CategoryName { get; set; } = null!;
 
         public List<SelectListItem> AvailableCategories { get; set; }

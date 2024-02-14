@@ -18,4 +18,6 @@ public partial class Product
     public int CategoryId { get; set; }
 
     public bool Deleted { get; set; }
+
+    public string? ImagePath { get; set; }
 }

@@ -1,8 +1,84 @@
-﻿@{
+﻿@model LatestECommerce.Models.ProductListModel;
+
+@{
     ViewData["Title"] = "Home Page";
+    Layout = "_PublicLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<script src="~/js/jquery-3.7.1.min.js"></script>
+
+<!-- product section -->
+<section class="product_section layout_padding">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Our <span>products</span>
+            </h2>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.ProductModels)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <div class="box">
+                        <div class="option_container">
+                            <div class="options">
+                                <a data-productid="@item.Id" class="addToCart option1" style="cursor: pointer;">
+                                    Add To Cart
+                                </a>
+                                <a href="" class="option2">
+                                    Buy Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="img-box">
+                            <img src="@item.ImagePath" alt="">
+                        </div>
+                        <div class="detail-box">
+                            <h5>
+                                @item.Name
+                            </h5>
+                            <h6>
+                                @item.Price RS
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="btn-box">
+            <a href="">
+                View All products
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(".addToCart").click(function () {
+        var productId = $(this).attr("data-productid");
+
+        $.ajax({
+            url: "@Url.Action("AddToCart", "Home")",
+            type: "post",
+            data: {
+                "productId": productId
+            },
+            success: function (response) {
+                console.log($("#cartCount"));
+                console.log(response);
+                if (response.success) {
+                    $("#cartCount").html(response.cartCount);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function () {
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+    });
+</script>
+<!-- end product section -->
