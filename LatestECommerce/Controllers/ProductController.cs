@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
+using AutoMapper;
 
 namespace LatestECommerce.Controllers
 {
@@ -17,12 +18,19 @@ namespace LatestECommerce.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly EcommerceContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IMapper _mapper;
 
-        public ProductController(ILogger<HomeController> logger, EcommerceContext context, IWebHostEnvironment hostEnvironment)
+        public ProductController(
+            ILogger<HomeController> logger,
+            EcommerceContext context,
+            IWebHostEnvironment hostEnvironment,
+            IMapper mapper
+            )
         {
             _logger = logger;
             _context = context;
             _hostEnvironment = hostEnvironment;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -37,14 +45,7 @@ namespace LatestECommerce.Controllers
             {
                 foreach (var product in products)
                 {
-                    var productModel = new ProductModel();
-                    productModel.Id = product.Id;
-                    productModel.Name = product.Name;
-                    productModel.Description = product.Description;
-                    productModel.Price = product.Price;
-                    productModel.StockQuantity = product.StockQuantity;
-                    productModel.CategoryId = product.CategoryId;
-                    productModel.Deleted = product.Deleted;
+                    var productModel = _mapper.Map<ProductModel>(product);
 
                     if (!string.IsNullOrWhiteSpace(product.ImagePath))
                     {
@@ -90,12 +91,7 @@ namespace LatestECommerce.Controllers
         {
             if (true)
             {
-                var product = new Product();
-                product.Name = model.Name;
-                product.Description = model.Description;
-                product.Price = model.Price;
-                product.StockQuantity = model.StockQuantity;
-                product.CategoryId = model.CategoryId;
+                var product = _mapper.Map<Product>(model);
 
                 _context.Products.Add(product);
                 _context.SaveChanges();
@@ -122,16 +118,8 @@ namespace LatestECommerce.Controllers
             if (product == null)
                 return RedirectToAction("Index");
 
-            // object initialization
-            var model = new ProductModel();
+            var model = _mapper.Map<ProductModel>(product);
 
-            model.Id = product.Id;
-            model.Name = product.Name;
-            model.Description = product.Description;
-            model.Price = product.Price;
-            model.StockQuantity = product.StockQuantity;
-            model.CategoryId = product.CategoryId;
-            model.Deleted = product.Deleted;
             model.ImagePath = "https://localhost:7176/" + product.ImagePath;
 
             model.CategoryName = "";
@@ -153,12 +141,9 @@ namespace LatestECommerce.Controllers
                 if (product == null)
                     return RedirectToAction("Index");
 
-                product.Name = model.Name;
-                product.Description = model.Description;
-                product.Price = model.Price;
-                product.StockQuantity = model.StockQuantity;
-                product.StockQuantity = model.StockQuantity;
-                product.CategoryId = model.CategoryId;
+                model.ImagePath = product.ImagePath;
+
+                product = _mapper.Map<Product>(model);
 
                 _context.SaveChanges();
 
