@@ -4,7 +4,9 @@
     ViewData["Title"] = "Home Page";
 }
 
+<script src="~/js/jquery-3.7.1.min.js"></script>
 
+<input name="Id" type="hidden" value="@Model.Id" />
 
 <div class="text-center">
     <a class="btn btn-primary" asp-controller="Customer" asp-action="Create" style="float: left">Add New</a> 
@@ -64,4 +66,84 @@
             <input type="submit" value="Edit" class="btn btn-primary" />
         </div>
     </form>
+
+    <br /><br /><br />
+
+    <div class="form-group">
+        <label asp-for="CustomerRoleId" class="control-label"></label>
+        @Html.DropDownList("CustomerRoleId", Model.AvailableCustomerRoles)
+        <span asp-validation-for="CustomerRoleId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="button" id="saveCustomerRole" value="Assign Role" class="btn btn-primary" />
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Role Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="rolesTable">
+        </tbody>
+    </table>
+
+    <script>
+        $("#saveCustomerRole").click(function () {
+
+            var selectedRoleValue = $("#CustomerRoleId").val();
+
+            $.ajax({
+                url: "@Url.Action("SaveCustomerRole", "Customer")",
+                type: "post",
+                data: {
+                    "customerId": @Model.Id,
+                    "customerRoleId": selectedRoleValue
+                },
+                success: function (response) {
+
+                    console.log(response.message);
+
+                    if (response.success) {
+                        $("#CustomerRoleId").val("0");
+
+                        $("#rolesTable").html("");
+
+                        var html = "";
+
+                        $.each(response.rolesList, function (i, item) {
+
+                            html = html + "<tr><td> " + item.name + " </td><td><button class='btn btn-danger deleteRole' style='float: left'>Delete</button></td></tr>";
+
+                        });
+
+                        $("#rolesTable").html(html);
+
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Your work has been saved",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.message
+                        });
+                    }
+                },
+                error: function () {
+                }
+            });
+        });
+
+        $(document).ready(function () {
+
+            $("#saveCustomerRole").click();
+            
+        });
+    </script>
 </div>

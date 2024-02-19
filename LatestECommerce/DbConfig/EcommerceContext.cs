@@ -21,6 +21,10 @@ public partial class EcommerceContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
+    public virtual DbSet<CustomerRole> CustomerRoles { get; set; }
+
+    public virtual DbSet<CustomerRoleMapping> CustomerRoleMappings { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductVariant> ProductVariants { get; set; }
@@ -65,6 +69,30 @@ public partial class EcommerceContext : DbContext
             entity.Property(e => e.PhoneNumber1).HasMaxLength(20);
             entity.Property(e => e.PhoneNumber2).HasMaxLength(20);
             entity.Property(e => e.Username).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CustomerRole>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC07A81705E4");
+
+            entity.ToTable("CustomerRole");
+
+            entity.Property(e => e.Name).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<CustomerRoleMapping>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC0796A5E8D3");
+
+            entity.ToTable("CustomerRoleMapping");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerRoleMappings)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK__CustomerR__Custo__72C60C4A");
+
+            entity.HasOne(d => d.CustomerRole).WithMany(p => p.CustomerRoleMappings)
+                .HasForeignKey(d => d.CustomerRoleId)
+                .HasConstraintName("FK__CustomerR__Custo__73BA3083");
         });
 
         modelBuilder.Entity<Product>(entity =>

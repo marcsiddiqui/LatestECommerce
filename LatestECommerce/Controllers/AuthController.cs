@@ -48,7 +48,7 @@ namespace LatestECommerce.Controllers
                 return View(model);
 
             CookieOptions co = new CookieOptions();
-            co.Expires = DateTime.Now.AddMinutes(5);
+            co.Expires = DateTime.Now.AddMinutes(15);
 
             Response.Cookies.Append("AuthenticatedCustomer", customer.Id.ToString(), co);
 

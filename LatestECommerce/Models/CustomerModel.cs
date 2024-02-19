@@ -4,6 +4,10 @@ namespace LatestECommerce.Models
 {
     public class CustomerModel
     {
+        public CustomerModel()
+        {
+            AvailableCustomerRoles = new List<SelectListItem>();
+        }
         public int Id { get; set; }
 
         public string FullName { get; set; } = null!;
@@ -21,5 +25,9 @@ namespace LatestECommerce.Models
         public bool Deleted { get; set; }
 
         public string? ImagePath { get; set; }
+
+        public int CustomerRoleId { get; set; }
+
+        public List<SelectListItem> AvailableCustomerRoles { get; set; }
     }
 }

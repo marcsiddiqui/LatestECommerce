@@ -116,6 +116,8 @@ namespace LatestECommerce.Controllers
             model.Password = customer.Password;
             model.ImagePath = "https://localhost:7176/" + customer.ImagePath;
 
+            PrepareAvailableCustomerRoles(model);
+
             return View(model);
         }
 
@@ -180,6 +182,60 @@ namespace LatestECommerce.Controllers
                 await photo.CopyToAsync(stream);
                 stream.Close();
             }
+        }
+
+        public void PrepareAvailableCustomerRoles(CustomerModel model)
+        {
+            var customerRoles = _context.CustomerRoles.Where(x => x.IsActive).ToList();
+            if (customerRoles != null && customerRoles.Any())
+            {
+                model.AvailableCustomerRoles.Add(new SelectListItem { Text = "Select Customer Role", Value = "0" });
+
+                foreach (var cat in customerRoles)
+                {
+                    model.AvailableCustomerRoles.Add(new SelectListItem { Text = cat.Name, Value = cat.Id.ToString(), Selected = model.CustomerRoleId == cat.Id });
+                }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SaveCustomerRole(int customerId, int customerRoleId)
+        {
+            if (customerId > 0 && customerRoleId > 0)
+            {
+                var existing = _context.CustomerRoleMappings.Where(x => x.CustomerId == customerId && x.CustomerRoleId == customerRoleId).ToList();
+                if (existing != null && existing.Any())
+                    return Json(new { Success = false, Message = "Already Exists!" });
+
+                var customerRoleMapping = new CustomerRoleMapping();
+                customerRoleMapping.CustomerId = customerId;
+                customerRoleMapping.CustomerRoleId = customerRoleId;
+                _context.CustomerRoleMappings.Add(customerRoleMapping);
+                _context.SaveChanges();
+            }
+
+            var allAssignedRoles = _context.CustomerRoleMappings.Where(x => x.CustomerId == customerId).ToList();
+
+            var roleIds = allAssignedRoles.Select(y => y.CustomerRoleId);
+
+            List<CustomerRoleModel> customerRoleListModels = new List<CustomerRoleModel>();
+
+            if (allAssignedRoles != null && allAssignedRoles.Any())
+            {
+                var customerRoles = _context.CustomerRoles.Where(x => roleIds.Contains(x.Id)).ToList();
+
+                if (customerRoles != null && customerRoles.Any())
+                {
+                    foreach (var customerRole in customerRoles)
+                    {
+                        CustomerRoleModel model = new CustomerRoleModel();
+                        model.Name = customerRole.Name;
+                        customerRoleListModels.Add(model);
+                    }
+                }
+            }
+
+            return Json(new { Success = true, RolesList = customerRoleListModels });
         }
     }
 }

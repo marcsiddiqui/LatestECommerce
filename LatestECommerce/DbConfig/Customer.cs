@@ -22,4 +22,6 @@ public partial class Customer
     public bool Deleted { get; set; }
 
     public string? ImagePath { get; set; }
+
+    public virtual ICollection<CustomerRoleMapping> CustomerRoleMappings { get; set; } = new List<CustomerRoleMapping>();
 }
