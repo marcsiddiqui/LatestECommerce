@@ -1,3 +1,4 @@
+using LatestECommerce;
 using LatestECommerce.DbConfig;
 using LatestECommerce.Mapper;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 builder.Services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ECommerce")));
+
+builder.Services.AddScoped<AdminOnlyAttribute>();
 
 var app = builder.Build();
 

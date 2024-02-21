@@ -62,6 +62,10 @@ namespace LatestECommerce.Controllers
                 }
             }
 
+            var customerId = Convert.ToInt32(Request.Cookies["AuthenticatedCustomer"]);
+            if (customerId > 0)
+                model.CartCount = _context.Carts.Where(x => x.CustomerId == customerId).Count();
+
             return View(model);
         }
 
@@ -79,16 +83,22 @@ namespace LatestECommerce.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId)
         {
+            var customerId = Convert.ToInt32(Request.Cookies["AuthenticatedCustomer"]);
+            if (customerId == 0)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             if (productId > 0)
             {
                 var cart = new Cart();
                 cart.ProductId = productId;
-                cart.CustomerId = 0;
+                cart.CustomerId = customerId;
 
                 _context.Carts.Add(cart);
                 _context.SaveChanges();
 
-                var totalCount = _context.Carts.Where(x=>x.CustomerId == 0).Count();
+                var totalCount = _context.Carts.Where(x=>x.CustomerId == customerId).Count();
 
                 return Json(new { Success = true, Message = "Product added to cart!", CartCount = totalCount });
             }

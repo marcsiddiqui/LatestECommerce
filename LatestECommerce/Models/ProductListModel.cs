@@ -8,5 +8,7 @@
         }
 
         public List<ProductModel> ProductModels { get; set; }
+
+        public int CartCount { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LatestECommerce.Controllers
 {
     [LoginOnly]
+    [TypeFilter(typeof(AdminOnlyAttribute))]
     public class CustomerRoleController : Controller
     {
         private readonly ILogger<HomeController> _logger;

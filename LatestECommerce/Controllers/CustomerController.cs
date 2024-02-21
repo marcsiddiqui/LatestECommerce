@@ -11,6 +11,7 @@ using System.IO;
 namespace LatestECommerce.Controllers
 {
     [LoginOnly]
+    [TypeFilter(typeof(AdminOnlyAttribute))]
     public class CustomerController : Controller
     {
         private readonly ILogger<HomeController> _logger;

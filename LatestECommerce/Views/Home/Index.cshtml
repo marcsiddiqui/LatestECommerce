@@ -54,31 +54,56 @@
 </section>
 
 <script>
-    $(".addToCart").click(function () {
-        var productId = $(this).attr("data-productid");
-
-        $.ajax({
-            url: "@Url.Action("AddToCart", "Home")",
-            type: "post",
-            data: {
-                "productId": productId
-            },
-            success: function (response) {
-                console.log($("#cartCount"));
-                console.log(response);
-                if (response.success) {
-                    $("#cartCount").html(response.cartCount);
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function () {
-            }
-        });
-    });
-
+    
     $(document).ready(function () {
 
+        $("#cartCount").html(@Model.CartCount);
+
+        $(".addToCart").click(function () {
+
+            var cookie = document.cookie;
+            if (cookie == null || cookie == undefined || cookie == '') {
+                window.location = "@Url.Action("Login", "Auth")";
+            }
+            else {
+                var productId = $(this).attr("data-productid");
+
+                $.ajax({
+                    url: "@Url.Action("AddToCart", "Home")",
+                    type: "post",
+                    data: {
+                        "productId": productId
+                    },
+                    success: function (response) {
+                        console.log($("#cartCount"));
+                        console.log(response);
+                        if (response.success) {
+                            $("#cartCount").html(response.cartCount);
+                            
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 1000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                }
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Added to Cart successfully"
+                            });
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        });
     });
 </script>
 <!-- end product section -->

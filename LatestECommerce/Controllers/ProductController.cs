@@ -13,6 +13,7 @@ using AutoMapper;
 namespace LatestECommerce.Controllers
 {
     [LoginOnly]
+    [TypeFilter(typeof(AdminOnlyAttribute))]
     public class ProductController : Controller
     {
         private readonly ILogger<HomeController> _logger;
