@@ -54,7 +54,7 @@ namespace LatestECommerce
 
                 // checking if any of the assigned role is like admin role
                 var customerRoles = _context.CustomerRoles.Where(x => roleIds.Contains(x.Id)).ToList();
-                if (customerRoles.Select(x => x.Name).Contains("Admin") || customerRoles.Select(x => x.Name).Contains("Manager"))
+                if (customerRoles.Select(x => x.Name).Contains("Admin"))
                     return true;
             }
 

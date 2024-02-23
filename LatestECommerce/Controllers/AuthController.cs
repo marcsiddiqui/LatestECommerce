@@ -51,6 +51,14 @@ namespace LatestECommerce.Controllers
             co.Expires = DateTime.Now.AddMinutes(15);
 
             Response.Cookies.Append("AuthenticatedCustomer", customer.Id.ToString(), co);
+            ViewBag.IsLoggedIn = true;
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("AuthenticatedCustomer");
 
             return RedirectToAction("Index", "Home");
         }

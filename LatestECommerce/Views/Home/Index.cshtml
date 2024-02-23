@@ -5,7 +5,32 @@
     Layout = "_PublicLayout";
 }
 
+@if (Model.IsAdmin)
+{
+    <a asp-controller ="Customer" asp-action="Index"
+        style="
+        background-color: #f7444e;
+        color: white;
+        font-size: larger;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        position: fixed;
+        top:0;
+        width: 100%;
+    ">
+        Administrator
+    </a>
+}
+
 <script src="~/js/jquery-3.7.1.min.js"></script>
+
+<table>
+
+    @Html.Raw(Model.RawHtml);
+
+</table>
+
 
 <!-- product section -->
 <section class="product_section layout_padding">
@@ -56,12 +81,21 @@
 <script>
     
     $(document).ready(function () {
+        var cookie = document.cookie;
+        if (cookie == null || cookie == undefined || cookie == '') {
+            $("#loginbtn").show();
+            $("#logoutbtn").hide();
+        }
+        else {
+            $("#loginbtn").hide();
+            $("#logoutbtn").show();
+        }
 
         $("#cartCount").html(@Model.CartCount);
 
         $(".addToCart").click(function () {
 
-            var cookie = document.cookie;
+            
             if (cookie == null || cookie == undefined || cookie == '') {
                 window.location = "@Url.Action("Login", "Auth")";
             }
